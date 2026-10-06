@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {products,cleanCart,total,orderUrl,filterProducts} from './shop.mjs';
+assert.deepEqual(cleanCart({'lem-16':2,unknown:1,'pump-25':-1,'water-80':100}),{'lem-16':2});
+const cart={'lem-16':2,'pump-25':1};
+assert.equal(total(cart),466500);
+const url=new URL(orderUrl(cart));
+assert.equal(url.origin+url.pathname,'https://wa.me/77772504300');
+assert.match(url.searchParams.get('text'),/Лемакс Премиум-16 — 2 шт\./);
+assert.match(url.searchParams.get('text'),/Grundfos UPS 25-40 — 1 шт\./);
+assert.match(url.searchParams.get('text'),/466\s500 ₸/);
+assert.equal(filterProducts({category:'boilers',power:'large'}).length,1);
+assert.equal(filterProducts({query:'несуществующий товар'}).length,0);
+assert.ok(filterProducts({max:50000,sort:'low'}).every((p,i,a)=>p.price<=50000&&(!i||p.price>=a[i-1].price)));
+assert.equal(filterProducts({query:'  ЛЕМАКС  '}).length,4);
+for(const p of products) assert.ok(p.price>0&&p.image);
+console.log('OK: cart validation, quantities, totals, WhatsApp number/message, combined filters and sorting');
