@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#121417">
+<meta name="description" content="Тепло РОСС Актау: подбор газового котла по площади дома, радиаторы, насосы, водонагреватели и сантехника. Установка, ремонт, гарантия. Заказ через WhatsApp.">
+<title>Тепло РОСС Актау — подбор котла и отопление</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23121417'/%3E%3Cpath d='M8 24V8h16' stroke='%23E30613' stroke-width='4' fill='none'/%3E%3Ccircle cx='20' cy='20' r='4' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Unbounded:wght@500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.2l2.4 11h10.6L20.5 7H6.4M9.5 20h.01M17 20h.01"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.2-3.8A8 8 0 1 1 8 19z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-1 1c-1.2-.5-2.4-1.7-2.9-2.9l1-1-1-2z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Перейти к содержимому</a>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <span>Актау, 29А мкр, 24 · самовывоз со склада</span>
+    <span class="topbar-hours">Режим работы <mark class="tbd">уточнить</mark></span>
+    <span class="topbar-demo">Макет · цены для примера</span>
+  </div>
+</div>
+
+<header class="header" id="header">
+  <div class="wrap header-in">
+    <button class="icon-btn burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Открыть меню"><svg><use href="#i-menu"/></svg></button>
+    <a class="logo" href="#/" aria-label="Тепло РОСС Актау — на главную">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-text">ТЕПЛО РОСС<small>АКТАУ · 20+ ЛЕТ</small></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Основное меню">
+      <div class="dd">
+        <button class="nav-link dd-btn" type="button" aria-expanded="false" aria-controls="dd-cat">Каталог <svg><use href="#i-down"/></svg></button>
+        <ul class="dd-menu" id="dd-cat" hidden></ul>
+      </div>
+      <a class="nav-link" href="#/podbor">Подбор котла</a>
+      <a class="nav-link" href="#/uslugi">Установка и сервис</a>
+      <a class="nav-link" href="#/kontakty">Контакты</a>
+      <form class="search" role="search" id="search-form">
+        <label class="sr-only" for="search">Поиск по каталогу</label>
+        <input id="search" name="q" type="search" placeholder="Котёл 24 кВт, насос, Thermex…" autocomplete="off">
+        <button class="icon-btn" type="submit" aria-label="Найти"><svg><use href="#i-search"/></svg></button>
+      </form>
+      <a class="nav-phone" href="tel:+77772504300">+7 777 250 43 00</a>
+    </nav>
+    <a class="header-phone" href="tel:+77772504300"><span>+7 777 250 43 00</span></a>
+    <div class="dd minicart-wrap">
+      <button class="cart-btn" type="button" aria-expanded="false" aria-controls="minicart" id="cart-btn">
+        <svg><use href="#i-cart"/></svg><span class="cart-btn-label">Корзина</span><b class="badge" data-count>0</b>
+      </button>
+      <div class="minicart" id="minicart" hidden></div>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1"></main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand">
+      <a class="logo" href="#/" aria-label="Тепло РОСС Актау — на главную"><span class="logo-mark" aria-hidden="true"></span><span class="logo-text">ТЕПЛО РОСС<small>АКТАУ</small></span></a>
+      <p>Газовые котлы, отопление, водонагреватели и сантехника. Подбор, установка, ремонт и гарантийное обслуживание.</p>
+    </div>
+    <nav aria-label="Каталог в подвале"><h2 class="footer-h">Каталог</h2><ul id="footer-cats"></ul></nav>
+    <div><h2 class="footer-h">Покупателям</h2><ul>
+      <li><a href="#/podbor">Подбор котла по площади</a></li>
+      <li><a href="#/uslugi">Установка и ремонт</a></li>
+      <li><a href="#/korzina">Корзина и заказ</a></li>
+      <li><a href="#/kontakty">Контакты и самовывоз</a></li>
+    </ul></div>
+    <div><h2 class="footer-h">Связаться</h2>
+      <p class="mono">Актау, 29А мкр, 24</p>
+      <p><a class="footer-phone" href="tel:+77772504300">+7 777 250 43 00</a></p>
+      <p><a class="link-wa" href="https://wa.me/77772504300" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Написать в WhatsApp</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© Тепло РОСС Актау</span>
+    <span>Макет сайта. Товары, цены и характеристики для примера и требуют подтверждения.</span>
+  </div>
+</footer>
+
+<a class="sticky-cart" href="#/korzina" hidden><svg><use href="#i-cart"/></svg><span data-count-label>0 товаров</span><b data-sum>0 ₸</b><span class="sticky-cart-go">Корзина <svg><use href="#i-arrow"/></svg></span></a>
+
+<dialog class="product-dialog" id="product-dialog" aria-labelledby="pd-title"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="wrap">Для работы каталога и корзины включите JavaScript. Заказ по телефону: +7 777 250 43 00.</p></noscript>
+</body>
+</html>
