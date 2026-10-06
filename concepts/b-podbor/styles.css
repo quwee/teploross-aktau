@@ -354,7 +354,36 @@ table { border-collapse: collapse; }
 .range2 input, .tb-search input { width: 100%; height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r); background: #fff; font-family: var(--f-mono); font-size: 14px; }
 .range2 input:hover, .tb-search:hover input { border-color: var(--mut); }
 .range2 input:focus, .tb-search input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 2px var(--grey-2); }
-.f-actions { display: flex; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+/* фильтры из ../catalog.mjs */
+.fx-group { margin: 0; padding: 16px 0; border: 0; border-top: 1px solid var(--line); min-width: 0; }
+.fx-title { float: left; width: 100%; padding: 0; margin-bottom: 10px; font: 500 12px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mut); }
+.fx-title + * { clear: both; }
+.fx-hint, .fx-note { margin: 0 0 8px; font: 12px/1.4 var(--f-mono); color: var(--mut); }
+.fx-note { padding: 16px 0; border-top: 1px solid var(--line); }
+.fx-check { display: flex; align-items: center; gap: 10px; min-height: 40px; cursor: pointer; font-size: 15px; }
+.fx-check input { width: 20px; height: 20px; margin: 0; accent-color: var(--red); cursor: pointer; flex: none; }
+.fx-label { flex: 1; line-height: 1.3; }
+.fx-count { color: var(--mut); font: 12px var(--f-mono); }
+.fx-check.is-off { color: #8a9099; cursor: not-allowed; }
+.fx-check:not(.is-off):hover .fx-label { text-decoration: underline; text-underline-offset: 3px; }
+.fx-range { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fx-field { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: var(--r); background: #fff; font: 12px var(--f-mono); color: var(--mut); }
+.fx-field:hover { border-color: var(--mut); }
+.fx-field:focus-within { border-color: var(--ink); box-shadow: 0 0 0 2px var(--grey-2); }
+.fx-field input { width: 100%; min-width: 0; border: 0; padding: 0; background: none; font: 14px var(--f-mono); color: var(--txt); -moz-appearance: textfield; }
+.fx-field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.fx-field input:focus { outline: none; }
+.fx-reset { width: 100%; min-height: 44px; margin-top: 8px; border: 1px solid var(--line); border-radius: var(--r); background: #fff; font-weight: 600; font-size: 15px; }
+.fx-reset:hover:not(:disabled) { border-color: var(--ink); }
+.fx-reset:disabled { color: #8a9099; background: var(--grey); cursor: not-allowed; }
+.fx-applied { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+.fx-pill { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 10px 0 12px; border: 1px solid var(--ink); border-radius: var(--r); background: #fff; font-size: 14px; }
+.fx-pill span { font-size: 18px; line-height: 1; color: var(--mut); }
+.fx-pill:hover { background: var(--ink); color: #fff; }
+.fx-pill:hover span { color: #fff; }
+.fx-clear { min-height: 34px; padding: 0 8px; border: 0; background: none; color: var(--red); font-weight: 600; font-size: 14px; }
+.fx-clear:hover { text-decoration: underline; text-underline-offset: 3px; }
+.f-actions { display: none; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
 .f-actions .btn { flex: 1; }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
 .f-open { display: none; }
@@ -383,7 +412,7 @@ table { border-collapse: collapse; }
   .filters::before { content: ''; display: block; width: 40px; height: 4px; margin: -6px auto 10px; border-radius: 2px; background: var(--grey-2); }
   .sheet-close, .sheet-apply { display: inline-grid; }
   .sheet-apply { display: inline-flex; }
-  .f-actions { position: sticky; bottom: 0; background: #fff; }
+  .f-actions { display: flex; position: sticky; bottom: 0; background: #fff; }
   .sheet-backdrop { position: fixed; inset: 0; z-index: 55; background: rgba(18, 20, 23, .55); }
   .toolbar .tb-search { order: -1; flex-basis: 100%; }
   .count { margin-right: auto; order: 5; flex-basis: 100%; }

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {products, cleanCart, setQty, count, total, orderText, orderUrl, filterProducts, suggest, MAX_QTY} from './data.mjs';
+import {products, cleanCart, setQty, count, total, orderText, orderUrl, suggest, MAX_QTY} from './data.mjs';
 
 assert.equal(new Set(products.map(p => p.id)).size, products.length, 'unique ids');
 assert.deepEqual(cleanCart({'c-lem-20':1, 'lem-16':2, nope:1, 'pump-25':0, 'water-80':1.5}), {'c-lem-20':1, 'lem-16':2});
@@ -26,14 +26,8 @@ const url = new URL(orderUrl(cart));
 assert.equal(url.origin + url.pathname, 'https://wa.me/77772504300');
 assert.equal(url.searchParams.get('text'), orderText(cart));
 
-assert.ok(filterProducts({category:'radiators'}).every(p => p.category === 'radiators'));
-const all = filterProducts();
-assert.ok(all.findIndex(p => !p.tag) > all.findLastIndex(p => p.tag), 'hits first');
-assert.ok(filterProducts({sort:'high', max:100000}).every((p, i, a) => p.price <= 100000 && (!i || p.price <= a[i - 1].price)));
-assert.ok(filterProducts({brands:['Thermex', 'IDDIS']}).every(p => ['Thermex', 'IDDIS'].includes(p.brand)));
-assert.equal(filterProducts({query:'  ЛЕМАКС '}).length, 5);
 assert.deepEqual(suggest('к'), []);
 assert.equal(suggest('котл')[0].type, 'category');
 assert.ok(suggest('котел').some(s => s.type === 'product'), 'ё/е insensitive');
 assert.ok(suggest('grundfos').every(s => s.type === 'product'));
-console.log('OK c-zakaz: cart, stepper, totals, WhatsApp text, filters, suggestions');
+console.log('OK c-zakaz: cart, stepper, totals, WhatsApp text, suggestions');

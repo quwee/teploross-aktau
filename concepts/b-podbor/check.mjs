@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {catalog, needPower, recommend, filterCatalog, cleanCart, cartTotal, cartCount, orderUrl} from './data.mjs';
+import {catalog, needPower, recommend, cleanCart, cartTotal, cartCount, orderUrl} from './data.mjs';
 
 // Подборщик: 1 кВт на 10 м² + 20 % запаса
 assert.equal(needPower(100), 12);
@@ -19,13 +19,6 @@ const big = recommend({area: 500, circuits: 2, mount: 'wall'});
 assert.ok(big.over && big.models.length === 0);
 
 // Каталог
-assert.ok(filterCatalog({cat: 'boilers'}).every(p => p.category === 'boilers'));
-assert.ok(filterCatalog({brands: ['Thermex'], sort: 'low'}).every((p, i, a) => p.brand === 'Thermex' && (!i || p.price >= a[i - 1].price)));
-assert.ok(filterCatalog({powers: ['l']}).every(p => p.power > 25));
-assert.ok(filterCatalog({min: 100000, max: 200000}).every(p => p.price >= 100000 && p.price <= 200000));
-assert.ok(filterCatalog({stock: true}).every(p => p.stock === 'in'));
-assert.equal(filterCatalog({q: '  ПРЕМИУМ-16В '}).length, 1);
-assert.equal(filterCatalog({q: 'несуществующий товар'}).length, 0);
 assert.equal(new Set(catalog.map(p => p.id)).size, catalog.length, 'уникальные id');
 for (const p of catalog) assert.ok(p.price > 0 && p.image && p.rows.length >= 3, p.id);
 
@@ -44,4 +37,4 @@ assert.match(text, /479\s000 ₸/);
 assert.match(text, /доставка по Актау/);
 assert.match(text, /Нужен монтаж/);
 assert.match(new URL(orderUrl(cart)).searchParams.get('text'), /самовывоз/);
-console.log('OK b-podbor: power picker, catalog filters, cart, WhatsApp message');
+console.log('OK b-podbor: power picker, cart, WhatsApp message');

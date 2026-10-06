@@ -119,41 +119,26 @@
       <p class="demo-note">Цены для примера. Актуальную цену и наличие подтвердит менеджер.</p>
     </div>
 
-    <div class="toolbar">
-      <div class="search">
-        <label class="sr-only" for="q">Поиск по каталогу</label>
-        <svg aria-hidden="true"><use href="#i-search"/></svg>
-        <input id="q" type="search" placeholder="Поиск: котёл, Grundfos, 100 литров" autocomplete="off">
-      </div>
-      <div class="sort">
-        <label for="sort">Сортировка</label>
-        <select id="sort">
-          <option value="popular">Популярные</option>
-          <option value="low">Сначала дешевле</option>
-          <option value="high">Сначала дороже</option>
-          <option value="name">По названию</option>
-        </select>
-      </div>
-      <button class="btn btn-line only-mobile" type="button" id="filters-open" aria-haspopup="dialog"><svg aria-hidden="true"><use href="#i-sliders"/></svg> Фильтры <span data-filter-count></span></button>
-    </div>
-
     <div class="chips cats" role="group" aria-label="Категория" id="cat-chips"></div>
-    <div class="filters-home" id="filters-home">
-      <div class="filters" id="filters">
-        <div class="chips" role="group" aria-label="Бренд" id="brand-chips"></div>
-        <div class="chips" role="group" aria-label="Мощность котла" id="power-chips"></div>
-        <div class="select-field">
-          <label for="max">Цена</label>
-          <select id="max">
-            <option value="0">Любая</option>
-          </select>
+    <div class="cat-layout">
+      <aside class="filters-home" id="filters-home" aria-label="Фильтры">
+        <div class="filters" id="filters"></div>
+      </aside>
+      <div class="results">
+        <div class="toolbar">
+          <div class="search">
+            <label class="sr-only" for="q">Поиск по каталогу</label>
+            <svg aria-hidden="true"><use href="#i-search"/></svg>
+            <input id="q" type="search" placeholder="Поиск: котёл 16 кВт, Grundfos, 100 литров" autocomplete="off">
+          </div>
+          <p class="result-count" id="result-count" aria-live="polite"></p>
+          <div class="sort" id="sort-box"></div>
+          <button class="btn btn-line only-mobile" type="button" id="filters-open" aria-haspopup="dialog"><svg aria-hidden="true"><use href="#i-sliders"/></svg> Фильтры <span data-filter-count></span></button>
         </div>
-        <button class="text-btn" type="button" data-action="reset">Сбросить</button>
+        <div id="applied"></div>
+        <div class="grid" id="grid"></div>
       </div>
     </div>
-
-    <p class="result-count" id="result-count" aria-live="polite"></p>
-    <div class="grid" id="grid"></div>
   </section>
 
   <section class="section-paper" id="why" aria-labelledby="why-title">

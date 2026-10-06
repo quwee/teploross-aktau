@@ -63,7 +63,6 @@ export const catalog = [
 ].map(p => ({...p, rows: p.rows || baseRows[p.id] || (p.category === 'boilers' ? boilerRows(p) : [['Описание', p.specs]])}));
 
 export const byId = id => catalog.find(p => p.id === id);
-export const brands = [...new Set(catalog.map(p => p.brand))];
 
 // Подбор котла: ≈1 кВт на 10 м² (дом с утеплением, потолки до ~2,7 м) плюс 20 % запаса.
 export const RESERVE = 1.2;
@@ -75,21 +74,6 @@ export function recommend({area, circuits, mount}) {
   if (!pool.length) { pool = sameMount; relaxed = true; } // двухконтурный можно использовать только на отопление
   const models = pool.filter(p => p.power >= need).sort((a, b) => a.power - b.power || a.price - b.price).slice(0, 3);
   return {base: area / 10, need, models, relaxed, over: !models.length};
-}
-
-// Каталог: категория, поиск, бренды, цена, мощность, наличие, сортировка.
-export const powerBuckets = {s: ['до 15 кВт', p => p <= 15], m: ['15–25 кВт', p => p > 15 && p <= 25], l: ['свыше 25 кВт', p => p > 25]};
-export function filterCatalog({cat = 'all', q = '', brands = [], min = '', max = '', powers = [], stock = false, sort = 'popular'} = {}) {
-  const query = q.trim().toLowerCase();
-  const list = catalog.filter(p =>
-    (cat === 'all' || p.category === cat) &&
-    (!query || `${p.name} ${p.brand} ${p.kind} ${p.rows.map(r => r[1]).join(' ')}`.toLowerCase().includes(query)) &&
-    (!brands.length || brands.includes(p.brand)) &&
-    (min === '' || p.price >= +min) && (max === '' || p.price <= +max) &&
-    (!powers.length || (p.power > 0 && powers.some(k => powerBuckets[k][1](p.power)))) &&
-    (!stock || p.stock === 'in'));
-  const by = {low: (a, b) => a.price - b.price, high: (a, b) => b.price - a.price, power: (a, b) => b.power - a.power || a.price - b.price, name: (a, b) => a.name.localeCompare(b.name, 'ru')}[sort];
-  return by ? list.sort(by) : list;
 }
 
 // Корзина: {id: qty}, 1–99 шт., только известные товары.

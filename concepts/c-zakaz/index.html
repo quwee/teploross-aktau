@@ -127,18 +127,19 @@
  <section class="wrap block catalog" id="catalog" tabindex="-1" aria-labelledby="cat-title">
   <div class="block-head"><h2 id="cat-title">Каталог</h2><p class="demo">Цены для примера</p></div>
   <div class="chips" id="chips" role="group" aria-label="Категория"></div>
-  <div class="toolbar">
-   <button type="button" class="filter-btn" data-act="filters"><span data-icon="sliders"></span>Фильтры<span class="badge" id="filter-badge" hidden></span></button>
-   <fieldset class="seg">
-    <legend class="sr">Сортировка</legend>
-    <input type="radio" name="sort" id="s-pop" value="popular" checked><label for="s-pop">Хиты</label>
-    <input type="radio" name="sort" id="s-low" value="low"><label for="s-low">Дешевле</label>
-    <input type="radio" name="sort" id="s-high" value="high"><label for="s-high">Дороже</label>
-   </fieldset>
-   <p class="found" id="found" aria-live="polite"></p>
+  <div class="cat-layout">
+   <aside class="filters-home" id="filters-home" aria-label="Фильтры"><div id="fx-box"></div></aside>
+   <div class="results">
+    <div class="toolbar">
+     <button type="button" class="filter-btn" data-act="filters"><span data-icon="sliders"></span>Фильтры<span class="badge" id="filter-badge" hidden></span></button>
+     <label class="cq"><span class="sr">Поиск в каталоге</span><span data-icon="search"></span><input type="search" id="cq" placeholder="Поиск: котёл 16 кВт, Grundfos, 80 л" autocomplete="off"></label>
+     <p class="found" id="found" aria-live="polite"></p>
+     <div id="sort-box"></div>
+    </div>
+    <div id="active-filters"></div>
+    <div class="grid" id="grid"></div>
+   </div>
   </div>
-  <div class="active-filters" id="active-filters"></div>
-  <div class="grid" id="grid"></div>
  </section>
 
  <section class="wrap block" id="services" aria-labelledby="srv-title">
@@ -216,18 +217,8 @@
 <dialog class="sheet" id="filter-dlg" aria-labelledby="filter-title">
  <div class="sheet-in">
   <div class="sheet-head"><h2 id="filter-title">Фильтры</h2><button type="button" class="round" data-act="close" aria-label="Закрыть фильтры"><span data-icon="close"></span></button></div>
-  <form class="sheet-body filters" id="filters">
-   <fieldset><legend>Бренд</legend><div class="checks" id="brand-checks"></div></fieldset>
-   <label class="field">Цена до
-    <select name="max">
-     <option value="">Любая</option><option value="30000">30 000 ₸</option><option value="60000">60 000 ₸</option><option value="100000">100 000 ₸</option><option value="250000">250 000 ₸</option>
-    </select>
-   </label>
-   <label class="field">Мощность котла
-    <select name="power"><option value="all">Любая</option><option value="small">до 20 кВт</option><option value="large">больше 20 кВт</option></select>
-   </label>
-  </form>
-  <div class="sheet-foot filters-foot"><button type="button" class="btn btn-line" data-act="reset">Сбросить</button><button type="button" class="btn btn-red" data-act="close" id="filter-apply">Показать</button></div>
+  <div class="sheet-body" id="sheet-body"></div>
+  <div class="sheet-foot filters-foot"><button type="button" class="btn btn-red" data-act="close" id="filter-apply">Показать</button></div>
  </div>
 </dialog>
 

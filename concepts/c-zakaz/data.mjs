@@ -48,24 +48,11 @@ export const orderUrl = (cart, opts) => waUrl(orderText(cart, opts));
 
 const norm = s => s.trim().toLowerCase().replace(/ё/g, 'е');
 
-export function filterProducts({category = 'all', brands: picked = [], max = Infinity, power = 'all', query = '', sort = 'popular'} = {}) {
- const q = norm(query);
- const list = products.filter(p =>
-  (category === 'all' || p.category === category) &&
-  (!picked.length || picked.includes(p.brand)) &&
-  p.price <= max &&
-  (power === 'all' || (p.power > 0 && (power === 'small' ? p.power <= 20 : p.power > 20))) &&
-  (!q || norm(`${p.name} ${p.brand} ${p.kind} ${p.specs}`).includes(q)));
- if (sort === 'low') return list.sort((a, b) => a.price - b.price);
- if (sort === 'high') return list.sort((a, b) => b.price - a.price);
- return list.sort((a, b) => !!b.tag - !!a.tag); // stable: hits first, catalog order otherwise
-}
-
 // Autocomplete: matching categories first, then up to 5 products.
 export function suggest(query) {
  const q = norm(query);
  if (q.length < 2) return [];
  const cats = categories.filter(c => norm(c.name).includes(q)).map(c => ({type:'category', id:c.id, label:c.name}));
- const items = filterProducts({query:q}).slice(0, 5).map(p => ({type:'product', id:p.id, label:p.name, hint:money(p.price)}));
+ const items = products.filter(p => norm(`${p.name} ${p.brand} ${p.kind} ${p.specs}`).includes(q)).slice(0, 5).map(p => ({type:'product', id:p.id, label:p.name, hint:money(p.price)}));
  return [...cats, ...items];
 }

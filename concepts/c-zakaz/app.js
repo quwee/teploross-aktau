@@ -1,4 +1,5 @@
-import {products, categories, brands, hits, byId, money, cleanCart, setQty, count, total, lines, orderText, orderUrl, waUrl, filterProducts, suggest, MAX_QTY, delivery} from './data.mjs';
+import {products, categories, hits, byId, money, cleanCart, setQty, count, total, lines, orderText, orderUrl, waUrl, suggest, MAX_QTY, delivery} from './data.mjs';
+import {emptyState, setCategory, resetFilters, filterCatalog, filtersHTML, appliedHTML, sortHTML, activeCount, bindFilters} from '../catalog.mjs';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -43,7 +44,7 @@ const catName = id => categories.find(c => c.id === id)?.name || '';
 // ---------- state ----------
 let cart = {};
 try { cart = cleanCart(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch {}
-const state = {category:'all', brands:[], max:Infinity, power:'all', query:'', sort:'popular'};
+const state = emptyState();
 const order = {receive:'pickup', install:false};
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -180,26 +181,21 @@ function openProduct(id) {
 }
 
 // ---------- catalog ----------
-const filterCount = () => state.brands.length + (state.max < Infinity) + (state.power !== 'all');
-
 function renderCatalog() {
- const list = filterProducts(state);
- $$('[data-act="cat"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === state.category));
+ const list = filterCatalog(products, state);
+ $$('[data-act="cat"]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === state.cat));
  $('#grid').innerHTML = list.length ? list.map(card).join('') : `<div class="empty empty-grid">
   <p class="empty-title">Ничего не нашли</p><p>Измените запрос или фильтры. Если товара нет на сайте, он может быть в магазине.</p>
   <div class="empty-actions"><button type="button" class="btn btn-red" data-act="reset-all">Сбросить всё</button>
-  <a class="btn btn-line" href="${waUrl(`Здравствуйте! Есть ли у вас ${state.query || 'нужный товар'}?`)}" target="_blank" rel="noopener">${icon('wa', 20)}Спросить наличие</a></div></div>`;
+  <a class="btn btn-line" href="${waUrl(`Здравствуйте! Есть ли у вас ${state.q || 'нужный товар'}?`)}" target="_blank" rel="noopener">${icon('wa', 20)}Спросить наличие</a></div></div>`;
  $('#found').textContent = `Найдено: ${items(list.length)}`;
- const fc = filterCount(), badge = $('#filter-badge');
+ const fc = activeCount(state), badge = $('#filter-badge');
  badge.hidden = !fc; badge.textContent = fc;
  $('#filter-apply').textContent = `Показать ${items(list.length)}`;
- const pills = [
-  state.query && `<button type="button" data-act="clear" data-what="query">Поиск: «${esc(state.query)}» ${icon('close', 14)}</button>`,
-  ...state.brands.map(b => `<button type="button" data-act="clear" data-what="brand" data-v="${esc(b)}">${esc(b)} ${icon('close', 14)}</button>`),
-  state.max < Infinity && `<button type="button" data-act="clear" data-what="max">до ${money(state.max)} ${icon('close', 14)}</button>`,
-  state.power !== 'all' && `<button type="button" data-act="clear" data-what="power">${state.power === 'small' ? 'до 20 кВт' : 'больше 20 кВт'} ${icon('close', 14)}</button>`
- ].filter(Boolean);
- $('#active-filters').innerHTML = pills.length ? `<span class="sr">Активные фильтры, нажмите чтобы убрать:</span>${pills.join('')}` : '';
+ $('#fx-box').innerHTML = filtersHTML(products, state, {catName});
+ $('#sort-box').innerHTML = sortHTML(state, 'sort');
+ $('#active-filters').innerHTML = appliedHTML(state, money);
+ if (document.activeElement !== $('#cq')) $('#cq').value = state.q;
 }
 
 function toCatalog() {
@@ -208,15 +204,6 @@ function toCatalog() {
  c.focus({preventScroll:true});
 }
 
-function syncFilterForm() {
- const f = $('#filters');
- $$('input[name="brand"]', f).forEach(i => { i.checked = state.brands.includes(i.value); });
- f.max.value = state.max < Infinity ? String(state.max) : '';
- f.power.value = state.power;
-}
-
-function resetFilters() { Object.assign(state, {brands:[], max:Infinity, power:'all'}); syncFilterForm(); }
-
 // static lists
 const catBtn = (c, cls = '') => `<button type="button" class="${cls}" data-act="cat" data-cat="${c.id}" aria-pressed="false">`;
 $('#hero-cats').innerHTML = categories.map(c => `<li>${catBtn(c, 'hero-cat')}<span class="hero-cat-ico">${icon(c.id, 30)}</span><span>${c.short}</span></button></li>`).join('');
@@ -224,17 +211,15 @@ $('#chips').innerHTML = [{id:'all', name:'Все товары'}, ...categories].
 $('#cat-menu').innerHTML = categories.map(c => `<li>${catBtn(c, 'dd-item')}${icon(c.id, 20)}${c.name}</button></li>`).join('');
 $('#mnav-cats').innerHTML = categories.map(c => `<li>${catBtn(c, 'mnav-cat')}${icon(c.id, 22)}${c.short}</button></li>`).join('');
 $('#footer-cats').innerHTML = categories.map(c => `<li><button type="button" data-act="cat" data-cat="${c.id}">${c.name}</button></li>`).join('');
-$('#brand-checks').innerHTML = brands.map(b => `<label class="check"><input type="checkbox" name="brand" value="${esc(b)}"><span>${esc(b)}</span></label>`).join('');
 $('#hits').innerHTML = hits.map(card).join('');
 
-$('#filters').addEventListener('change', e => {
- const f = e.currentTarget;
- state.brands = $$('input[name="brand"]:checked', f).map(i => i.value);
- state.max = f.max.value ? Number(f.max.value) : Infinity;
- state.power = f.power.value;
- renderCatalog();
-});
-$$('input[name="sort"]').forEach(r => r.addEventListener('change', () => { state.sort = r.value; renderCatalog(); }));
+bindFilters(document.body, state, renderCatalog);
+$('#cq').addEventListener('input', e => { state.q = e.target.value; renderCatalog(); });
+
+// фильтры: слева на десктопе, в нижней шторке на мобильном
+const filterDlg = $('#filter-dlg');
+const placeFilters = () => (filterDlg.open ? $('#sheet-body') : $('#filters-home')).append($('#fx-box'));
+filterDlg.addEventListener('close', placeFilters);
 
 // ---------- menus ----------
 const catMenu = $('#cat-menu'), catToggle = $('#cat-btn'), burger = $('.burger'), mnav = $('#mnav');
@@ -263,29 +248,19 @@ document.addEventListener('click', e => {
   case 'remove': setCart(setQty(cart, id, 0), id); break;
   case 'open': openProduct(id); break;
   case 'cart': renderCart(); $('#cart-dlg').showModal(); $('#cart-title').focus(); break;
-  case 'filters': syncFilterForm(); $('#filter-dlg').showModal(); break;
+  case 'filters': filterDlg.showModal(); placeFilters(); break;
   case 'close': el.closest('dialog').close(); break;
-  case 'reset': resetFilters(); renderCatalog(); break;
-  case 'reset-all': resetFilters(); state.query = ''; $('#q').value = ''; state.category = 'all'; renderCatalog(); break;
+  case 'reset-all': resetFilters(state); setCategory(state, 'all'); $('#q').value = ''; renderCatalog(); break;
   case 'to-catalog': $('#cart-dlg').close(); toCatalog(); break;
   case 'cat': {
    const fromCatalog = !!el.closest('#chips');
-   state.category = el.dataset.cat;
+   setCategory(state, el.dataset.cat);
    setMenu(false); setMnav(false);
    renderCatalog();
    if (!fromCatalog) toCatalog();
    break;
   }
   case 'q': $('#q').value = el.dataset.q; runSearch(); break;
-  case 'clear': {
-   const w = el.dataset.what;
-   if (w === 'query') { state.query = ''; $('#q').value = ''; }
-   if (w === 'brand') state.brands = state.brands.filter(b => b !== el.dataset.v);
-   if (w === 'max') state.max = Infinity;
-   if (w === 'power') state.power = 'all';
-   renderCatalog(); $('#chips button[aria-pressed="true"]')?.focus();
-   break;
-  }
  }
 });
 
@@ -306,10 +281,10 @@ function drawSuggest() {
 const closeSuggest = () => { opts = []; active = -1; drawSuggest(); };
 function choose(o) {
  closeSuggest();
- if (o.type === 'category') { state.category = o.id; state.query = ''; q.value = ''; renderCatalog(); toCatalog(); }
+ if (o.type === 'category') { setCategory(state, o.id); state.q = ''; q.value = ''; renderCatalog(); toCatalog(); }
  else openProduct(o.id);
 }
-function runSearch() { closeSuggest(); state.query = q.value.trim(); state.category = 'all'; renderCatalog(); toCatalog(); }
+function runSearch() { closeSuggest(); state.q = q.value.trim(); setCategory(state, 'all'); renderCatalog(); toCatalog(); }
 q.addEventListener('input', () => { opts = suggest(q.value); active = -1; drawSuggest(); });
 q.addEventListener('keydown', e => {
  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {

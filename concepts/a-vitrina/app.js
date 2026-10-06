@@ -1,4 +1,5 @@
-import {products, categories, brands, byId, money, cleanCart, count, total, orderText, waUrl, filterProducts, PRICES, PICKUP, DELIVERY} from './data.mjs';
+import {products, categories, brands, byId, money, cleanCart, count, total, orderText, waUrl, PICKUP, DELIVERY} from './data.mjs';
+import {emptyState, setCategory, resetFilters, filterCatalog, filtersHTML, appliedHTML, sortHTML, activeCount, bindFilters} from '../catalog.mjs';
 
 const KEY = 'teploross-a-vitrina-cart';
 const IMG = '../../assets/';
@@ -12,7 +13,7 @@ const icon = id => `<svg aria-hidden="true"><use href="#${id}"/></svg>`;
 
 let cart = {};
 try { cart = cleanCart(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { cart = {}; }
-const filters = {category: 'all', brand: 'all', power: 'all', max: 0, query: '', sort: 'popular'};
+const filters = emptyState();
 const checkout = {step: 1, name: '', method: 'pickup', install: false, comment: ''};
 
 function save() {
@@ -38,7 +39,6 @@ function buildStatic() {
     </a>`).join('')
     + `<a class="tile tile-store" href="#visit"><img src="${IMG}store.webp" alt="" loading="lazy"><span class="tile-text"><span class="tile-title">Магазин на 29А мкр, 24</span><span class="tile-note">Самовывоз и консультация на месте</span></span></a>`;
 
-  $('#max').innerHTML = `<option value="0">Любая</option>` + PRICES.map(v => `<option value="${v}">до ${money(v)}</option>`).join('');
   document.querySelectorAll('[data-price]').forEach(el => { el.textContent = money(byId(el.dataset.price).price); });
 }
 
@@ -47,22 +47,14 @@ const chip = (group, value, label, active) =>
   `<button type="button" class="chip" data-${group}="${esc(value)}" aria-pressed="${active}">${esc(label)}</button>`;
 
 function renderFilters() {
-  $('#cat-chips').innerHTML = chip('cat', 'all', 'Все товары', filters.category === 'all')
-    + categories.map(c => chip('cat', c.id, c.name, filters.category === c.id)).join('');
-  const inCat = filters.category === 'all' ? products : products.filter(p => p.category === filters.category);
-  const visibleBrands = brands.filter(b => inCat.some(p => p.brand === b));
-  if (!visibleBrands.includes(filters.brand)) filters.brand = 'all';
-  $('#brand-chips').innerHTML = chip('brand', 'all', 'Все бренды', filters.brand === 'all')
-    + visibleBrands.map(b => chip('brand', b, b, filters.brand === b)).join('');
-  const showPower = filters.category === 'boilers';
-  if (!showPower) filters.power = 'all';
-  $('#power-chips').hidden = !showPower;
-  $('#power-chips').innerHTML = [['all', 'Любая мощность'], ['small', 'до 20 кВт'], ['large', 'свыше 20 кВт']]
-    .map(([v, l]) => chip('power', v, l, filters.power === v)).join('');
-  $('#max').value = String(filters.max);
-  const extra = (filters.brand !== 'all') + (filters.power !== 'all') + (filters.max > 0);
-  $('[data-filter-count]').textContent = extra ? `· ${extra}` : '';
-  $('[data-action="reset"]').disabled = !extra && filters.category === 'all' && !filters.query;
+  $('#cat-chips').innerHTML = chip('cat', 'all', 'Все товары', filters.cat === 'all')
+    + categories.map(c => chip('cat', c.id, c.name, filters.cat === c.id)).join('');
+  $('#filters').innerHTML = filtersHTML(products, filters, {catName});
+  $('#sort-box').innerHTML = sortHTML(filters, 'sort');
+  $('#applied').innerHTML = appliedHTML(filters, money);
+  const n = activeCount(filters);
+  $('[data-filter-count]').textContent = n ? `· ${n}` : '';
+  if (document.activeElement !== $('#q')) $('#q').value = filters.q;
 }
 
 function card(p) {
@@ -84,17 +76,17 @@ function card(p) {
 
 function renderCatalog() {
   renderFilters();
-  const list = filterProducts(filters);
-  $('#result-count').textContent = `${plural(list.length, ['товар', 'товара', 'товаров'])}${filters.category !== 'all' ? ` · ${catName(filters.category)}` : ''}`;
+  const list = filterCatalog(products, filters);
+  $('#result-count').textContent = `${plural(list.length, ['товар', 'товара', 'товаров'])}`;
   $('#sheet-apply').textContent = `Показать ${plural(list.length, ['товар', 'товара', 'товаров'])}`;
   $('#grid').innerHTML = list.length ? list.map(card).join('') :
     `<div class="empty"><p class="h3">Ничего не нашлось</p><p>Попробуйте другой запрос или сбросьте фильтры. Нужной модели может не быть на сайте — спросите в WhatsApp.</p>
-     <div class="hero-cta"><button class="btn btn-ink" type="button" data-action="reset">Сбросить фильтры</button>
-     <a class="link-arrow" href="${waUrl(`Здравствуйте! Ищу: ${filters.query || 'оборудование'}. Есть в наличии?`)}" target="_blank" rel="noopener">Спросить в WhatsApp ${icon('i-arrow')}</a></div></div>`;
+     <div class="hero-cta"><button class="btn btn-ink" type="button" data-fx-reset>Сбросить фильтры</button>
+     <a class="link-arrow" href="${waUrl(`Здравствуйте! Ищу: ${filters.q || 'оборудование'}. Есть в наличии?`)}" target="_blank" rel="noopener">Спросить в WhatsApp ${icon('i-arrow')}</a></div></div>`;
 }
 
 function goCatalog(cat) {
-  filters.category = cat;
+  setCategory(filters, cat);
   renderCatalog();
   const el = $('#catalog');
   el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
@@ -266,7 +258,7 @@ document.addEventListener('click', e => {
   const d = t.dataset;
   if (!mega.hidden && !mega.contains(t) && t !== megaBtn) setMega(false);
   if (d.close !== undefined) t.closest('dialog')?.close();
-  if (d.cat && t.matches('.chip')) { filters.category = d.cat; renderCatalog(); refocus(`#cat-chips [data-cat="${d.cat}"]`); }
+  if (d.cat && t.matches('.chip')) { setCategory(filters, d.cat); renderCatalog(); refocus(`#cat-chips [data-cat="${d.cat}"]`); }
   else if (d.cat) { e.preventDefault(); setMega(false); goCatalog(d.cat); }
   else if (d.goto) goCatalog(d.goto);
   else if (d.open) openProduct(d.open);
@@ -281,11 +273,8 @@ document.addEventListener('click', e => {
   else if (d.dec) setQty(d.dec, cart[d.dec] - 1);
   else if (d.remove) { const name = byId(d.remove).name; setQty(d.remove, 0); toast(`${name} удалён из корзины`); $('#cart-body [data-close]')?.focus(); }
   else if (d.step) { checkout.step = +d.step; renderCart(); $('#cart-body').querySelector('input:checked, .btn-red')?.focus(); }
-  else if (d.brand) { filters.brand = d.brand; renderCatalog(); refocus(`[data-brand="${CSS.escape(d.brand)}"]`); }
-  else if (d.power) { filters.power = d.power; renderCatalog(); refocus(`[data-power="${d.power}"]`); }
   else if (d.action === 'cart') openCart();
-  else if (d.action === 'search') { goCatalog(filters.category); $('#q').focus({preventScroll: true}); }
-  else if (d.action === 'reset') { Object.assign(filters, {category: 'all', brand: 'all', power: 'all', max: 0, query: ''}); $('#q').value = ''; renderCatalog(); $('#q').focus(); }
+  else if (d.action === 'search') { goCatalog(filters.cat); $('#q').focus({preventScroll: true}); }
   else if (d.action === 'clear') { cart = {}; save(); renderCart(); renderCatalog(); }
 });
 const refocus = sel => document.querySelector(sel)?.focus();
@@ -305,9 +294,8 @@ $('#cart').addEventListener('input', e => {
   Object.assign(checkout, {method: data.get('method'), install: data.has('install'), name: data.get('name'), comment: data.get('comment')});
 });
 
-$('#q').addEventListener('input', e => { filters.query = e.target.value; renderCatalog(); });
-$('#sort').addEventListener('change', e => { filters.sort = e.target.value; renderCatalog(); });
-$('#max').addEventListener('change', e => { filters.max = +e.target.value; renderCatalog(); });
+$('#q').addEventListener('input', e => { filters.q = e.target.value; renderCatalog(); });
+bindFilters(document.body, filters, renderCatalog);
 $('#filters-open').addEventListener('click', () => $('#filter-sheet').showModal());
 $('#menu-open').addEventListener('click', () => $('#menu').showModal());
 

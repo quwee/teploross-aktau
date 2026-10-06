@@ -1,5 +1,6 @@
-import {categories, money, kw, catalog, byId, brands, RESERVE, recommend, powerBuckets, filterCatalog,
+import {categories, money, kw, catalog, byId, RESERVE, recommend,
   cleanCart, cartItems, cartTotal, cartCount, orderUrl, waUrl, CART_KEY} from './data.mjs';
+import {emptyState, setCategory, filterCatalog, filtersHTML, appliedHTML, sorts, activeCount, bindFilters} from '../catalog.mjs';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -19,7 +20,7 @@ let cart = cleanCart(store.get(CART_KEY, {}));
 let view = store.get('teploross-b-podbor-view', 'grid');
 let order = {pickup: true, install: false};
 let picker = {area: 120, circuits: 1, mount: 'floor'};
-let filters = {cat: 'all', q: '', brands: [], min: '', max: '', powers: [], stock: false, sort: 'popular'};
+const filters = emptyState();
 
 /* ---------- корзина ---------- */
 function setQty(id, qty) {
@@ -271,31 +272,8 @@ function catalogPage() {
       <aside class="filters" id="filters" aria-labelledby="f-title">
         <div class="sheet-head"><h2 id="f-title" class="f-title">Фильтры</h2>
           <button class="icon-btn sheet-close" type="button" aria-label="Закрыть фильтры">${icon('close')}</button></div>
-        <form id="filter-form">
-          <fieldset class="f-group"><legend>Бренд</legend>
-            ${brands.map(b => {
-              const n = filterCatalog({...filters, brands: [b]}).length;
-              return `<label class="check"><input type="checkbox" name="brand" value="${esc(b)}" ${filters.brands.includes(b) ? 'checked' : ''} ${!n && !filters.brands.includes(b) ? 'disabled' : ''}><span>${esc(b)}</span><small class="mono">${n}</small></label>`;
-            }).join('')}
-          </fieldset>
-          <fieldset class="f-group"><legend>Цена, ₸</legend>
-            <div class="range2">
-              <label><span class="sr-only">Цена от</span><input type="number" name="min" min="0" step="1000" placeholder="от 18 500" value="${filters.min}" inputmode="numeric"></label>
-              <span aria-hidden="true">—</span>
-              <label><span class="sr-only">Цена до</span><input type="number" name="max" min="0" step="1000" placeholder="до 549 000" value="${filters.max}" inputmode="numeric"></label>
-            </div>
-          </fieldset>
-          <fieldset class="f-group"><legend>Мощность котла</legend>
-            ${Object.entries(powerBuckets).map(([k, [label]]) => `<label class="check"><input type="checkbox" name="power" value="${k}" ${filters.powers.includes(k) ? 'checked' : ''}><span>${label}</span></label>`).join('')}
-          </fieldset>
-          <fieldset class="f-group"><legend>Наличие</legend>
-            <label class="check"><input type="checkbox" name="stock" ${filters.stock ? 'checked' : ''}><span>Только в наличии</span></label>
-          </fieldset>
-          <div class="f-actions">
-            <button class="btn btn-ghost" type="button" id="f-reset">Сбросить</button>
-            <button class="btn btn-dark sheet-apply" type="button">Показать</button>
-          </div>
-        </form>
+        <div id="fx-box"></div>
+        <div class="f-actions"><button class="btn btn-dark sheet-apply" type="button">Показать</button></div>
       </aside>
       <section class="results" aria-label="Товары">
         <div class="toolbar">
@@ -304,48 +282,36 @@ function catalogPage() {
           <p class="count mono" id="count" aria-live="polite"></p>
           <label class="select"><span class="sr-only">Сортировка</span>
             <select id="sort">
-              ${[['popular', 'Популярные'], ['low', 'Дешевле'], ['high', 'Дороже'], ['power', 'Мощнее'], ['name', 'По названию']].map(([v, t]) => `<option value="${v}" ${filters.sort === v ? 'selected' : ''}>${t}</option>`).join('')}
+              ${sorts(filters).map(([v, t]) => `<option value="${v}" ${filters.sort === v ? 'selected' : ''}>${t}</option>`).join('')}
             </select>${icon('down')}</label>
           <div class="view-toggle" role="group" aria-label="Вид списка">
             <button class="icon-btn" type="button" data-view="grid" aria-pressed="${view === 'grid'}" aria-label="Сетка">${icon('grid')}</button>
             <button class="icon-btn" type="button" data-view="list" aria-pressed="${view === 'list'}" aria-label="Список">${icon('list')}</button>
           </div>
         </div>
+        <div id="applied"></div>
         <div class="grid" id="results" data-view="${view}"></div>
       </section>
     </div>
   </div>`;
 }
-const activeFilters = () => filters.brands.length + filters.powers.length + (filters.min !== '') + (filters.max !== '') + filters.stock;
 function updateResults() {
-  const list = filterCatalog(filters);
+  const list = filterCatalog(catalog, filters);
   $('#results').innerHTML = list.length ? list.map(card).join('')
     : `<div class="empty"><p class="code mono">0 / НЕТ СОВПАДЕНИЙ</p><h2 class="h2">Ничего не нашли</h2><p>Измените запрос или сбросьте фильтры. Нужной модели может не быть в макете — спросите в WhatsApp.</p>
-       <div class="empty-actions"><button class="btn btn-dark" type="button" id="empty-reset">Сбросить фильтры</button><a class="btn btn-ghost" href="${waUrl(`Здравствуйте! Ищу: ${filters.q || 'оборудование'}. Есть в наличии?`)}" target="_blank" rel="noopener">${icon('wa')}Спросить в WhatsApp</a></div></div>`;
+       <div class="empty-actions"><button class="btn btn-dark" type="button" data-fx-reset>Сбросить фильтры</button><a class="btn btn-ghost" href="${waUrl(`Здравствуйте! Ищу: ${filters.q || 'оборудование'}. Есть в наличии?`)}" target="_blank" rel="noopener">${icon('wa')}Спросить в WhatsApp</a></div></div>`;
   $('#count').textContent = `Найдено: ${items(list.length)}`;
-  $('.sheet-apply').textContent = `Показать ${list.length}`;
-  const n = activeFilters();
-  $('#f-reset').disabled = !n;
+  $('.sheet-apply').textContent = `Показать ${items(list.length)}`;
+  $('#fx-box').innerHTML = filtersHTML(catalog, filters, {catName});
+  $('#applied').innerHTML = appliedHTML(filters, money);
+  const n = activeCount(filters);
   $('#f-count').hidden = !n; $('#f-count').textContent = n;
-  // бренды: число позиций и disabled для пустых
-  $$('input[name="brand"]').forEach(i => {
-    const c = filterCatalog({...filters, brands: [i.value]}).length;
-    i.disabled = !c && !i.checked;
-    i.closest('label').querySelector('small').textContent = c;
-  });
+  if (document.activeElement !== $('#q')) $('#q').value = filters.q;
 }
 function bindCatalog() {
-  const form = $('#filter-form');
-  form.addEventListener('input', () => {
-    const fd = new FormData(form);
-    Object.assign(filters, {brands: fd.getAll('brand'), powers: fd.getAll('power'), min: fd.get('min'), max: fd.get('max'), stock: fd.has('stock')});
-    updateResults();
-  });
+  bindFilters($('.cat-layout'), filters, updateResults);
   $('#q').addEventListener('input', e => { filters.q = e.target.value; updateResults(); });
   $('#sort').addEventListener('change', e => { filters.sort = e.target.value; updateResults(); });
-  const reset = () => { Object.assign(filters, {q: '', brands: [], min: '', max: '', powers: [], stock: false}); render(); };
-  $('#f-reset').addEventListener('click', reset);
-  $('#results').addEventListener('click', e => { if (e.target.closest('#empty-reset')) reset(); });
   $$('[data-view]').forEach(b => b.addEventListener('click', () => {
     view = b.dataset.view; store.set('teploross-b-podbor-view', view);
     $('#results').dataset.view = view;
@@ -460,7 +426,7 @@ function render() {
   document.body.classList.remove('lock');
   $$('.nav-link[href]').forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === `#/${page}` && !!page));
   if (page === 'katalog') {
-    filters.cat = categories.some(c => c.id === sub) ? sub : 'all';
+    setCategory(filters, categories.some(c => c.id === sub) ? sub : 'all');
     if (q !== null) filters.q = q;
     $('#main').innerHTML = catalogPage(); bindCatalog();
     document.title = `${filters.cat === 'all' ? 'Каталог' : catName(filters.cat)} — Тепло РОСС Актау`;

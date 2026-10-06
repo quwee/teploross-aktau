@@ -47,19 +47,3 @@ export function orderText(cart, {name = '', method = 'pickup', install = false, 
 
 export const waUrl = text => 'https://wa.me/77772504300?text=' + encodeURIComponent(text);
 export const orderUrl = (cart, details) => waUrl(orderText(cart, details));
-
-export const PRICES = [50000, 100000, 250000, 500000];
-
-export function filterProducts({category = 'all', brand = 'all', power = 'all', max = 0, query = '', sort = 'popular'} = {}) {
-  const q = query.trim().toLowerCase();
-  const list = products.filter(p =>
-    (category === 'all' || p.category === category) &&
-    (brand === 'all' || p.brand === brand) &&
-    (power === 'all' || (p.power > 0 && (power === 'small' ? p.power <= 20 : p.power > 20))) &&
-    (!max || p.price <= max) &&
-    (`${p.name} ${p.brand} ${p.kind} ${p.specs}`).toLowerCase().includes(q));
-  if (sort === 'low') list.sort((a, b) => a.price - b.price);
-  if (sort === 'high') list.sort((a, b) => b.price - a.price);
-  if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-  return list;
-}
