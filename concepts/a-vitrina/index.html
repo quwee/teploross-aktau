@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Тепло РОСС Актау — котлы, отопление и сантехника</title>
+<meta name="description" content="Тепло РОСС Актау: газовые котлы Лемакс, радиаторы, насосы, водонагреватели и сантехника. Более 20 лет в Актау. Подбор, установка, ремонт, гарантия.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%2316171A'/%3E%3Ccircle cx='20' cy='20' r='7' fill='%23D21F26'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6L5 8Zm4 0V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 8h18M3 16h18" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h4m4 0h8" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+
+<a class="skip" href="#catalog">Перейти к каталогу</a>
+
+<div class="topline">
+  <div class="wrap topline-in">
+    <p>Актау, 29А мкр, 24 · самовывоз, установка, гарантия</p>
+    <a href="https://wa.me/77772504300" target="_blank" rel="noopener">WhatsApp +7 777 250 43 00</a>
+  </div>
+</div>
+
+<header class="header" id="header">
+  <div class="wrap header-in">
+    <button class="icon-btn only-mobile" type="button" id="menu-open" aria-label="Открыть меню" aria-haspopup="dialog"><svg><use href="#i-menu"/></svg></button>
+    <a class="logo" href="#top" aria-label="Тепло РОСС Актау, на главную">Тепло&nbsp;РОСС<span>Актау</span></a>
+    <nav class="nav only-desktop" aria-label="Основное меню">
+      <button type="button" class="nav-link" id="mega-btn" aria-expanded="false" aria-controls="mega">Каталог <svg><use href="#i-down"/></svg></button>
+      <a class="nav-link" href="#service">Подбор и монтаж</a>
+      <a class="nav-link" href="#why">О магазине</a>
+      <a class="nav-link" href="#visit">Контакты</a>
+    </nav>
+    <div class="header-actions">
+      <a class="nav-link phone only-desktop" href="tel:+77772504300">+7 777 250 43 00</a>
+      <button class="icon-btn" type="button" data-action="search" aria-label="Поиск по каталогу"><svg><use href="#i-search"/></svg></button>
+      <button class="icon-btn cart-btn" type="button" data-action="cart" aria-haspopup="dialog" aria-label="Корзина"><svg><use href="#i-bag"/></svg><span class="badge" data-cart-count hidden>0</span></button>
+    </div>
+  </div>
+  <div class="mega" id="mega" hidden>
+    <div class="wrap mega-in">
+      <ul class="mega-list" id="mega-list"></ul>
+      <figure class="mega-figure"><img id="mega-img" src="../../assets/lemaks.webp" alt="" width="900" height="900"><figcaption id="mega-cap">Газовые котлы</figcaption></figure>
+      <div class="mega-side">
+        <p class="eyebrow">Не знаете, что выбрать?</p>
+        <p class="mega-note">Рассчитаем мощность котла по площади дома и подберём обвязку.</p>
+        <a class="link-arrow" href="#service">Подбор и монтаж <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-text">
+      <p class="eyebrow">Магазин отопления в Актау · более 20 лет</p>
+      <h1 id="hero-title" class="display">Тепло для вашего дома</h1>
+      <p class="lead">Газовые котлы Лемакс, радиаторы, насосы, водонагреватели и сантехника. Подберём оборудование, установим и возьмём на сервис.</p>
+      <div class="hero-cta">
+        <a class="btn btn-red" href="#catalog">Смотреть каталог</a>
+        <a class="link-arrow" href="https://wa.me/77772504300?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%20%D0%BA%D0%BE%D1%82%D0%BB%D0%B0." target="_blank" rel="noopener">Подобрать котёл в WhatsApp <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <img src="../../assets/lemaks.webp" alt="Напольный газовый котёл Лемакс Премиум" width="900" height="900" fetchpriority="high">
+      <figcaption><button type="button" class="hero-cap" data-open="lem-16"><span>Лемакс Премиум-16</span><span class="price" data-price="lem-16"></span></button></figcaption>
+    </figure>
+  </section>
+
+  <section class="facts wrap" aria-label="Почему нам доверяют">
+    <ul>
+      <li><strong>20+ лет</strong><span>на рынке Актау</span></li>
+      <li><strong>Лемакс</strong><span>официальный дилер <em class="tbc">[уточнить]</em></span></li>
+      <li><strong>Монтаж</strong><span>установка и ремонт</span></li>
+      <li><strong>Гарантия</strong><span>на оборудование и работы</span></li>
+    </ul>
+  </section>
+
+  <section class="section wrap" aria-labelledby="cats-title">
+    <div class="section-head">
+      <h2 id="cats-title" class="h2">Категории</h2>
+      <a class="link-arrow" href="#catalog">Весь каталог <svg><use href="#i-arrow"/></svg></a>
+    </div>
+    <div class="bento" id="bento"></div>
+  </section>
+
+  <section class="promo" id="service" aria-labelledby="promo-title">
+    <div class="wrap promo-in">
+      <img class="promo-img" src="../../assets/boilers.webp" alt="Газовые котлы Лемакс в торговом зале магазина" width="2446" height="1351" loading="lazy">
+      <div class="promo-text">
+        <p class="eyebrow">Услуга</p>
+        <h2 id="promo-title" class="h1">Подбор котла и монтаж под ключ</h2>
+        <ol class="promo-steps">
+          <li><span>01</span>Считаем мощность по площади и утеплению дома</li>
+          <li><span>02</span>Подбираем котёл, радиаторы, насос и обвязку</li>
+          <li><span>03</span>Монтируем, запускаем и берём на обслуживание</li>
+        </ol>
+        <a class="btn btn-red" href="https://wa.me/77772504300?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9D%D1%83%D0%B6%D0%B5%D0%BD%20%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%20%D0%BA%D0%BE%D1%82%D0%BB%D0%B0%20%D0%B8%20%D0%BC%D0%BE%D0%BD%D1%82%D0%B0%D0%B6." target="_blank" rel="noopener">Обсудить в WhatsApp</a>
+        <p class="small">Стоимость и сроки монтажа <span class="tbc">[уточнить]</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap catalog" id="catalog" aria-labelledby="catalog-title" tabindex="-1">
+    <div class="section-head">
+      <h2 id="catalog-title" class="h1">Каталог</h2>
+      <p class="demo-note">Цены для примера. Актуальную цену и наличие подтвердит менеджер.</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">
+        <label class="sr-only" for="q">Поиск по каталогу</label>
+        <svg aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Поиск: котёл, Grundfos, 100 литров" autocomplete="off">
+      </div>
+      <div class="sort">
+        <label for="sort">Сортировка</label>
+        <select id="sort">
+          <option value="popular">Популярные</option>
+          <option value="low">Сначала дешевле</option>
+          <option value="high">Сначала дороже</option>
+          <option value="name">По названию</option>
+        </select>
+      </div>
+      <button class="btn btn-line only-mobile" type="button" id="filters-open" aria-haspopup="dialog"><svg aria-hidden="true"><use href="#i-sliders"/></svg> Фильтры <span data-filter-count></span></button>
+    </div>
+
+    <div class="chips cats" role="group" aria-label="Категория" id="cat-chips"></div>
+    <div class="filters-home" id="filters-home">
+      <div class="filters" id="filters">
+        <div class="chips" role="group" aria-label="Бренд" id="brand-chips"></div>
+        <div class="chips" role="group" aria-label="Мощность котла" id="power-chips"></div>
+        <div class="select-field">
+          <label for="max">Цена</label>
+          <select id="max">
+            <option value="0">Любая</option>
+          </select>
+        </div>
+        <button class="text-btn" type="button" data-action="reset">Сбросить</button>
+      </div>
+    </div>
+
+    <p class="result-count" id="result-count" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="section-paper" id="why" aria-labelledby="why-title">
+    <div class="wrap why">
+      <h2 id="why-title" class="h1">Почему Тепло РОСС</h2>
+      <ol class="why-list">
+        <li><span class="num">01</span><div><h3>Более 20 лет в Актау</h3><p>Знаем, какое оборудование работает в местных домах и квартирах, и отвечаем за свои рекомендации.</p></div></li>
+        <li><span class="num">02</span><div><h3>Официальный дилер Лемакс <span class="tbc">[уточнить]</span></h3><p>Основная специализация магазина — газовые котлы Лемакс: напольные и настенные модели.</p></div></li>
+        <li><span class="num">03</span><div><h3>Подбор, установка, ремонт</h3><p>Рассчитаем мощность, смонтируем систему отопления и будем обслуживать её дальше.</p></div></li>
+        <li><span class="num">04</span><div><h3>Гарантия</h3><p>Гарантия производителя на оборудование и наша гарантия на монтаж. Сроки <span class="tbc">[уточнить]</span>.</p></div></li>
+        <li><span class="num">05</span><div><h3>Самовывоз в Актау</h3><p>Заберите заказ в магазине на 29А мкр, 24 или договоритесь о доставке по городу <span class="tbc">[условия уточнить]</span>.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section wrap visit" id="visit" aria-labelledby="visit-title">
+    <figure class="visit-big"><img src="../../assets/showroom.webp" alt="Торговый зал: водонагреватели, котлы и комплектующие" width="2446" height="1366" loading="lazy"></figure>
+    <div class="visit-text">
+      <p class="eyebrow">Магазин</p>
+      <h2 id="visit-title" class="h1">Приходите посмотреть вживую</h2>
+      <dl class="visit-dl">
+        <div><dt>Адрес</dt><dd>Актау, 29А микрорайон, 24</dd></div>
+        <div><dt>Телефон и WhatsApp</dt><dd><a href="tel:+77772504300">+7 777 250 43 00</a></dd></div>
+        <div><dt>Режим работы</dt><dd><span class="tbc">[уточнить]</span></dd></div>
+      </dl>
+      <div class="hero-cta">
+        <a class="btn btn-ink" href="https://yandex.kz/maps/?text=%D0%90%D0%BA%D1%82%D0%B0%D1%83%2C%2029%D0%90%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%2C%2024" target="_blank" rel="noopener">Построить маршрут</a>
+        <a class="link-arrow" href="https://wa.me/77772504300" target="_blank" rel="noopener">Написать в WhatsApp <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <figure class="visit-small"><img src="../../assets/store.webp" alt="Вывеска магазина Тепло РОСС" width="2437" height="1372" loading="lazy"></figure>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-brand">
+      <a class="logo logo-light" href="#top">Тепло&nbsp;РОСС<span>Актау</span></a>
+      <p>Отопительное оборудование и сантехника. Подбор, установка, ремонт и гарантия.</p>
+    </div>
+    <nav aria-label="Категории в подвале"><h2 class="footer-h">Каталог</h2><ul id="footer-cats"></ul></nav>
+    <div><h2 class="footer-h">Покупателям</h2><ul>
+      <li><a href="#service">Подбор и монтаж</a></li>
+      <li><a href="#why">Гарантия</a></li>
+      <li><a href="#visit">Самовывоз</a></li>
+    </ul></div>
+    <div><h2 class="footer-h">Контакты</h2><ul>
+      <li>Актау, 29А мкр, 24</li>
+      <li><a href="tel:+77772504300">+7 777 250 43 00</a></li>
+      <li><a href="https://wa.me/77772504300" target="_blank" rel="noopener">WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="wrap footer-bottom"><p>© Тепло РОСС Актау</p><p>Макет сайта. Цены и характеристики для примера.</p></div>
+</footer>
+
+<button class="sticky-cart" type="button" data-action="cart" aria-haspopup="dialog" hidden><span><svg aria-hidden="true"><use href="#i-bag"/></svg> Корзина · <span data-cart-count>0</span></span><span class="price" data-cart-total></span></button>
+
+<dialog class="drawer" id="cart" aria-labelledby="cart-title"><div class="drawer-in" id="cart-body"></div></dialog>
+<dialog class="modal" id="product" aria-labelledby="product-title"><div id="product-body"></div></dialog>
+<dialog class="sheet" id="filter-sheet" aria-labelledby="sheet-title">
+  <div class="sheet-head"><h2 id="sheet-title" class="h3">Фильтры</h2><button class="icon-btn" type="button" data-close aria-label="Закрыть фильтры"><svg><use href="#i-close"/></svg></button></div>
+  <div class="sheet-body" id="sheet-body"></div>
+  <div class="sheet-foot"><button class="btn btn-red btn-wide" type="button" data-close id="sheet-apply">Показать</button></div>
+</dialog>
+<dialog class="menu" id="menu" aria-label="Меню">
+  <div class="sheet-head"><a class="logo" href="#top" data-close>Тепло&nbsp;РОСС<span>Актау</span></a><button class="icon-btn" type="button" data-close aria-label="Закрыть меню"><svg><use href="#i-close"/></svg></button></div>
+  <nav aria-label="Мобильное меню"><ul class="menu-list" id="menu-list"></ul>
+    <ul class="menu-sub">
+      <li><a href="#service" data-close>Подбор и монтаж</a></li>
+      <li><a href="#why" data-close>О магазине</a></li>
+      <li><a href="#visit" data-close>Контакты</a></li>
+    </ul></nav>
+  <div class="menu-foot"><a class="btn btn-red btn-wide" href="https://wa.me/77772504300" target="_blank" rel="noopener">WhatsApp +7 777 250 43 00</a><p class="small">Актау, 29А мкр, 24</p></div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="wrap">Для каталога и корзины включите JavaScript.</p></noscript>
+</body>
+</html>
